@@ -1,32 +1,33 @@
-// GameObject.h
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
 #include <SFML/Graphics.hpp>
-#include <memory>
+#include "Collider.h"
 
-class GameObject : public sf::Drawable {
+class GameObject {
 public:
-    GameObject();
-    virtual ~GameObject();
+    GameObject(sf::Texture& texture, const sf::Vector2f& position, bool dynamic, bool absPos);
 
-    virtual void update(const sf::Time& delta) = 0;
+    void update(float deltaTime);
 
-    // Static method to instantiate a GameObject.
-    // Returns a unique_ptr for automatic memory management.
-    template <typename GameObjectType, typename... Args>
-    static std::unique_ptr<GameObjectType> Instantiate(Args&&... args) {
-        return std::make_unique<GameObjectType>(std::forward<Args>(args)...);
-    }
+    void draw(sf::RenderWindow& window);
 
-protected:
-    sf::Vector2f position;
+    void freeze();
+
+    void alignToGrid();
+
+    Collider& getCollider();
+
     sf::Sprite sprite;
+    sf::Vector2f position;
+    sf::Vector2f velocity; // If object dynamic
+    const bool dynamic;
+    const bool absPos; // Snap object to grid
+    sf::RectangleShape colliderBody; // This is the member you need for your collider
+    Collider collider;
+private:
 
-    // This is the method from sf::Drawable that we must implement
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override = 0;
-
-    // Other common attributes and methods for game objects...
 };
+
 
 #endif // GAMEOBJECT_H

@@ -1,90 +1,121 @@
 #include <SFML/Graphics.hpp>
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 #include "cmake-build-debug/GameObject.h"
 
 //Pixel Size
 const sf::Vector2<float> pixelSize = sf::Vector2<float>(12,12);
-const float m_gravity = .1f;
+const sf::Time coolDown = sf::milliseconds(100); // Cool down for drag and drawing
+float deltaTime = 0.005667f; // DeltaTime (adjust as needed)
+const float gravity = 9.81f; // Example gravity value (adjust as needed)
+
 
 //List of all pixels
 std::vector<GameObject> pixels;
 
-class WaterObject : public GameObject {
-public:
-    WaterObject(float xPos, float yPos, sf::Vector2<float> vel);
-    // Other members and methods specific to WaterObject
-
-    // Concrete implementation of the draw method
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override {
-        // Drawing logic for WaterObject
-    }
-
-    // Concrete implementation of the update method
-    void update(const sf::Time& delta) override {
-        // Update logic for WaterObject
-        xPos += vel.x * delta.asSeconds();
-        yPos += vel.y * delta.asSeconds();
-        // Adjust position to align to a pixel grid if necessary
-        float adjustedX = std::floor(xPos / pixelSize.x) * pixelSize.x;
-        float adjustedY = std::floor(yPos / pixelSize.y) * pixelSize.y;
-        shape.setPosition(adjustedX, adjustedY);
-    }
-private:
-    float xPos, yPos;
-    sf::Vector2f vel; // Velocity
-    sf::Vector2f pixelSize; // Size of the pixel grid
-    sf::RectangleShape shape; // Graphical representation
-};
-
-WaterObject::WaterObject(float x, float y, sf::Vector2<float> vel) {
-
-}
 
 
 int main()
 {
     //Create the window
-    sf::RenderWindow window(sf::VideoMode(1920, 1080), "SFML Application");
+    sf::RenderWindow window(sf::VideoMode(900, 500), "Pixel Engine");
 
-    while (window.isOpen())
-    {
+    // Create a 1x1 pixel white texture
+    sf::Image whitePixel;
+    whitePixel.create(pixelSize.x, pixelSize.y, sf::Color::White);
+
+    // Save the texture to a file (optional)
+    whitePixel.saveToFile("object_texture.png");
+
+    // Load the texture for your GameObject (replace "object_texture.png" with your file path)
+    sf::Texture objectTexture;
+    if (!objectTexture.loadFromFile("object_texture.png")) {
+        // Handle texture loading error
+        return 1;
+    }
+    bool isDrawingR = false;
+    bool isDrawingL = false;
+
+    //Create a cool down for drag and draw
+    sf::Clock clock;
+
+    while (window.isOpen()) {
         sf::Event event;
+        while (window.pollEvent(event)) {
 
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed) {
-                window.close();
-            }
+            switch (event.type) {
+                case sf::Event::Closed:
+                    window.close();
+                    break;
+                case sf::Event::MouseButtonPressed:
+                    if (event.mouseButton.button == sf::Mouse::Right) {
+                        isDrawingR = true;
+                    }
+                    if (event.mouseButton.button == sf::Mouse::Left) {
+                        isDrawingL = true;
+                    }
+                    break;
+                case sf::Event::MouseButtonReleased:
+                    if (event.mouseButton.button == sf::Mouse::Right) {
+                        isDrawingR = false;
 
-            // Check if the left mouse button was pressed
-            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-                // Get mouse position
-                sf::Vector2i clickPosition = sf::Mouse::getPosition(window);
-                // Place a pixel at the current mouse position
-                GameObject::Instantiate<WaterObject>(clickPosition.x, clickPosition.y, sf::Vector2f(0,m_gravity));
-                //createPixel(clickPosition.x, clickPosition.y);
-            }
-            // Check if the right mouse button was pressed
-            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right) {
-                // Get mouse position
-                sf::Vector2i clickPosition = sf::Mouse::getPosition(window);
-                // Delete the pixel at the current mouse position
-                //deletePixel(clickPosition.x, clickPosition.y);
-            }
+                    }
+                    if (event.mouseButton.button == sf::Mouse::Left) {
+                        isDrawingL = false;
 
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        //Draw Objects
+        if (isDrawingR && clock.getElapsedTime() >= coolDown) {
+            // Get mouse position
+            sf::Vector2i clickPosition = sf::Mouse::getPosition(window);
+            // Place a pixel at the current mouse position
+            GameObject gameObject(objectTexture, sf::Vector2f(clickPosition.x, clickPosition.y), false, true);
+            //Add 'gameObject' to 'pixels' vector
+            pixels.push_back(gameObject);
+
+            clock.restart();
+        }
+        if (isDrawingL && clock.getElapsedTime() >= coolDown) {
+            // Get mouse position
+            sf::Vector2i clickPosition = sf::Mouse::getPosition(window);
+            // Place a pixel at the current mouse position
+            GameObject gameObject(objectTexture, sf::Vector2f(clickPosition.x, clickPosition.y), true, true);
+            //Add 'gameObject' to 'pixels'
+            pixels.push_back(gameObject);
+
+            clock.restart();
         }
 
         window.clear();
 
+
         // for every 'pixel' in 'pixels'
         for (GameObject& pixel : pixels) {
-            // Update each pixel with gravity and then draw it
-            //pixel.update(sf::Vector2f (0, m_gravity));
-            //window.draw(pixel);
-        }
+            // Apply gravity if the space directly below the current pixel is not occupied
+            if (pixel.position.y <= window.getSize().y - pixelSize.y ) {
+                // Apply gravity only if the pixel is above the bottom of the window
+                pixel.velocity += sf::Vector2f(0, gravity * deltaTime);
+            }else{
+                pixel.velocity = sf::Vector2f(0, 0);
+            }
 
+            pixel.update(deltaTime);
+            pixel.draw(window);
+
+        }
         window.display();
     }
+
 }
+
+
+
 

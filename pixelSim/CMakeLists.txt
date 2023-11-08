@@ -5,7 +5,9 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(pixelSim main.cpp
         cmake-build-debug/GameObject.cpp
-        cmake-build-debug/GameObject.h)
+        cmake-build-debug/GameObject.h
+        cmake-build-debug/Collider.cpp
+        cmake-build-debug/Collider.h)
 
 set(SFML_STATIC_LIBRARIES TRUE)
 set(SFML_DIR C:/Users/jacob/Downloads/SFML-2.6.0-windows-gcc-13.1.0-mingw-64-bit/SFML-2.6.0/lib/cmake/SFML)
