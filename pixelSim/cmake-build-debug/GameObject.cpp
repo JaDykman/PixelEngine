@@ -1,11 +1,9 @@
 // GameObject.cpp
 #include <cmath>
 #include "GameObject.h"
-#include "Collider.h"
 
-GameObject::GameObject(sf::Texture& texture, const sf::Vector2f& position, bool dynamic, bool absPos)
-        : sprite(texture), position(position), dynamic(dynamic), absPos(absPos),
-        colliderBody(), collider(colliderBody), velocity(sf::Vector2f (0.f,0.f)){
+GameObject::GameObject(sf::Texture& texture, sf::Vector2<float> position, bool dynamic, bool absPos)
+        : sprite(texture), position(position), dynamic(dynamic), absPos(absPos), velocity(sf::Vector2f (0.f,0.f)){
 
 
     sprite.setPosition(position);
@@ -32,10 +30,7 @@ void GameObject::update(float deltaTime) {
         } else {
             sprite.setPosition(position);
         }
-
-
     }
-
 }
 
 // Draw method
@@ -44,16 +39,11 @@ void GameObject::draw(sf::RenderWindow& window) {
         // Adjust position to align to a pixel grid if necessary
         alignToGrid();
     }
-
     window.draw(sprite);
 }
 
 void GameObject::freeze() {
     velocity = sf::Vector2f (0,0);
-}
-
-Collider& GameObject::getCollider() {
-    return collider;
 }
 
 void GameObject::alignToGrid() {

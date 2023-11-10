@@ -128,30 +128,6 @@ pixelSim/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\pixelSim.dir\build.make CMakeFiles/pixelSim.dir/build
 .PHONY : pixelSim/fast
 
-Collider.obj: Collider.cpp.obj
-.PHONY : Collider.obj
-
-# target to build an object file
-Collider.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\pixelSim.dir\build.make CMakeFiles/pixelSim.dir/Collider.cpp.obj
-.PHONY : Collider.cpp.obj
-
-Collider.i: Collider.cpp.i
-.PHONY : Collider.i
-
-# target to preprocess a source file
-Collider.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\pixelSim.dir\build.make CMakeFiles/pixelSim.dir/Collider.cpp.i
-.PHONY : Collider.cpp.i
-
-Collider.s: Collider.cpp.s
-.PHONY : Collider.s
-
-# target to generate assembly for a file
-Collider.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\pixelSim.dir\build.make CMakeFiles/pixelSim.dir/Collider.cpp.s
-.PHONY : Collider.cpp.s
-
 GameObject.obj: GameObject.cpp.obj
 .PHONY : GameObject.obj
 
@@ -209,9 +185,6 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... pixelSim
-	@echo ... Collider.obj
-	@echo ... Collider.i
-	@echo ... Collider.s
 	@echo ... GameObject.obj
 	@echo ... GameObject.i
 	@echo ... GameObject.s

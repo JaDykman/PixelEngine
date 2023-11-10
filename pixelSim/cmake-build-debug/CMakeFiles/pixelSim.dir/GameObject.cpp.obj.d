@@ -263,5 +263,4 @@ CMakeFiles/pixelSim.dir/GameObject.cpp.obj: \
  C:/Users/jacob/Downloads/SFML-2.6.0-windows-gcc-13.1.0-mingw-64-bit/SFML-2.6.0/include/SFML/Graphics/Glsl.inl \
  C:/Users/jacob/Downloads/SFML-2.6.0-windows-gcc-13.1.0-mingw-64-bit/SFML-2.6.0/include/SFML/Graphics/Sprite.hpp \
  C:/Users/jacob/Downloads/SFML-2.6.0-windows-gcc-13.1.0-mingw-64-bit/SFML-2.6.0/include/SFML/Graphics/Text.hpp \
- C:/Users/jacob/Downloads/SFML-2.6.0-windows-gcc-13.1.0-mingw-64-bit/SFML-2.6.0/include/SFML/Graphics/VertexBuffer.hpp \
- C:\Users\jacob\OneDrive\Documents\GitHub\PixelEngine\pixelSim\cmake-build-debug\Collider.h
+ C:/Users/jacob/Downloads/SFML-2.6.0-windows-gcc-13.1.0-mingw-64-bit/SFML-2.6.0/include/SFML/Graphics/VertexBuffer.hpp
