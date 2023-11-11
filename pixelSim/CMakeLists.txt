@@ -4,8 +4,6 @@ project(pixelSim)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(pixelSim main.cpp
-        cmake-build-debug/GameObject.cpp
-        cmake-build-debug/GameObject.h
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

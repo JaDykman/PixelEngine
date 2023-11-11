@@ -1,6 +1,4 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/pixelSim.dir/GameObject.cpp.obj"
-  "CMakeFiles/pixelSim.dir/GameObject.cpp.obj.d"
   "CMakeFiles/pixelSim.dir/main.cpp.obj"
   "CMakeFiles/pixelSim.dir/main.cpp.obj.d"
   "libpixelSim.dll.a"

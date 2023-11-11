@@ -8,7 +8,6 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "C:/Users/jacob/OneDrive/Documents/GitHub/PixelEngine/pixelSim/cmake-build-debug/GameObject.cpp" "CMakeFiles/pixelSim.dir/GameObject.cpp.obj" "gcc" "CMakeFiles/pixelSim.dir/GameObject.cpp.obj.d"
   "C:/Users/jacob/OneDrive/Documents/GitHub/PixelEngine/pixelSim/main.cpp" "CMakeFiles/pixelSim.dir/main.cpp.obj" "gcc" "CMakeFiles/pixelSim.dir/main.cpp.obj.d"
   )
 
