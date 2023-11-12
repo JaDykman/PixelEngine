@@ -262,6 +262,9 @@ OpenAL_LIB:FILEPATH=C:/Users/jacob/Downloads/SFML-2.6.0-windows-gcc-13.1.0-mingw
 //Path to a file.
 SFML_DOC_DIR:PATH=SFML_DOC_DIR-NOTFOUND
 
+//The directory containing a CMake configuration file for TGUI.
+TGUI_DIR:PATH=TGUI_DIR-NOTFOUND
+
 //Path to a library.
 VorbisEnc_LIB:FILEPATH=C:/Users/jacob/Downloads/SFML-2.6.0-windows-gcc-13.1.0-mingw-64-bit/SFML-2.6.0/lib/libvorbisenc.a
 

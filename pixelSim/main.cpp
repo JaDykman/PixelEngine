@@ -1,10 +1,11 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
+#include <iostream>
 
 // Constants and globals
 const sf::Vector2f pixelSize(12.0f, 12.0f); //TODO this
-const float gravity = 9.81f;
-float deltaTime = 0.005667f;
+float gravity = 9.81f;
+float deltaTime = 0.015667f;
 bool buttonL;
 bool buttonR;
 struct GameObject{
@@ -14,6 +15,85 @@ struct GameObject{
     float w; float h;
     sf::Color c;
     int id;
+};
+class Slider {
+public:
+    Slider(float x, float y, float width, float height, float minVal, float maxVal)
+            : isHorizontal(width > height) {
+        // Initialize the slider bar
+        bar.setSize(sf::Vector2f(width, height));
+        bar.setPosition(x, y);
+        bar.setFillColor(sf::Color(255,255,255,1));
+
+        // Initialize the slider handle
+        float handleSize = isHorizontal ? height : width;
+        handle.setRadius(handleSize / 2);
+        if (isHorizontal) {
+            handle.setPosition(x, y + (height / 2) - handle.getRadius());
+        } else {
+            handle.setPosition(x + (width / 2) - handle.getRadius(), y);
+        }
+        handle.setFillColor(sf::Color::Red);
+
+        // Slider values
+        minValue = minVal;
+        maxValue = maxVal;
+        currentValue = minVal;
+    }
+
+    void handleEvent(sf::Event& event, const sf::RenderWindow& window) {
+        if (event.type == sf::Event::MouseButtonPressed) {
+            if (event.mouseButton.button == sf::Mouse::Left) {
+                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+                if (handle.getGlobalBounds().contains(mousePos.x, mousePos.y)) {
+                    isDragging = true;
+                }
+            }
+        }
+
+        if (event.type == sf::Event::MouseButtonReleased) {
+            if (event.mouseButton.button == sf::Mouse::Left) {
+                isDragging = false;
+            }
+        }
+
+        if (event.type == sf::Event::MouseMoved) {
+            if (isDragging) {
+                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+                if (isHorizontal) {
+                    float newPos = std::max(static_cast<float>(mousePos.x), bar.getPosition().x);
+                    newPos = std::min(newPos, bar.getPosition().x + bar.getSize().x - handle.getRadius() * 2);
+                    handle.setPosition(newPos, handle.getPosition().y);
+
+                    // Update current value for horizontal slider
+                    currentValue = minValue + (newPos - bar.getPosition().x) / bar.getSize().x * (maxValue - minValue);
+                } else {
+                    float newPos = std::max(static_cast<float>(mousePos.y), bar.getPosition().y);
+                    newPos = std::min(newPos, bar.getPosition().y + bar.getSize().y - handle.getRadius() * 2);
+                    handle.setPosition(handle.getPosition().x, newPos);
+
+                    // Update current value for vertical slider
+                    currentValue = minValue + (newPos - bar.getPosition().y) / bar.getSize().y * (maxValue - minValue);
+                }
+            }
+        }
+    }
+
+    void draw(sf::RenderWindow& window) {
+        window.draw(bar);
+        window.draw(handle);
+    }
+
+    float getValue() const {
+        return currentValue;
+    }
+
+private:
+    sf::RectangleShape bar;
+    sf::CircleShape handle;
+    bool isDragging = false;
+    bool isHorizontal;
+    float minValue, maxValue, currentValue;
 };
 
 std::vector<GameObject> objects;
@@ -65,6 +145,22 @@ auto IsPointInRectangle = [](float rectX, float rectY, float width, float height
     // Check if the point is within the bounds of the rectangle
     return (px >= left && px <= right) && (py >= top && py <= bottom);
 };
+bool isGroundOrObjectBelow(GameObject& obj) {
+    // Example check for ground or other objects
+    // This needs to be tailored to your game's logic
+    for (const GameObject other : objects) {
+        if (other.id != obj.id) {
+            // Adjust these conditions based on your game's collision logic
+            if (obj.px < other.px + other.w &&
+                obj.px + obj.w > other.px &&
+                obj.py < other.py + other.h &&
+                obj.h + obj.py > other.py) {
+                return true; // There's an object below
+            }
+        }
+    }
+    return false; // Nothing below
+}
 bool isInCollidingPairs(GameObject *obj) { // Function to check if an object is in the vecCollidingPairs
     for (const auto& pair : vecCollidingPairs) {
         if (pair.first == obj || pair.second == obj) {
@@ -74,13 +170,14 @@ bool isInCollidingPairs(GameObject *obj) { // Function to check if an object is 
     return false;
 }
 
-
 sf::RenderWindow window(sf::VideoMode(900, 500), "Pixel Engine"); // Create the game window
-
 
 int main()
 {
-    for (int i = 0; i < 50; ++i) { // Draw some pixels randomly
+    Slider timeSlider(0, 0, 10, 100, 0 , deltaTime);
+    Slider gravitySlider(10,0,10, 100, -gravity, gravity);
+
+    for (int i = 0; i < 100; ++i) { // Draw some pixels randomly
         float adjustedX = rand() % (int)std::round(window.getSize().x / pixelSize.x) * pixelSize.x;
         float adjustedY = rand() % (int) std::round(window.getSize().y / pixelSize.y) * pixelSize.y;
         AddRect(adjustedX, adjustedY);
@@ -91,7 +188,13 @@ int main()
     while (window.isOpen()) {
         sf::Event event{};
         vecCollidingPairs.clear(); // Clear colliding objects vector every frame
+        deltaTime = timeSlider.getValue();
+        gravity = gravitySlider.getValue();
+
         while (window.pollEvent(event)) {
+            timeSlider.handleEvent(event, window);
+            gravitySlider.handleEvent(event, window);
+
             if (event.type == sf::Event::Closed) window.close();
             else if (event.type == sf::Event::MouseButtonPressed) handleMouseButtonPressed(event);
             else if (event.type == sf::Event::MouseButtonReleased) handleMouseButtonReleased(event);
@@ -106,15 +209,18 @@ int main()
             sf::Vector2i mousePos = sf::Mouse::getPosition(window);
             drawLineBetween(pSelectedObject->px, pSelectedObject->py, mousePos.x, mousePos.y, sf::Color::Cyan);
         }
+
         // Physics
         for (auto &obj : objects) {
             obj.ax = -obj.vx * 0.3f;
-            if (obj.py < window.getSize().y - pixelSize.y) {
-                obj.ay = gravity - obj.vy * 0.3f; // Include gravity
-            }else{
+            // Check if the object is at the bottom and moving downwards
+            if (obj.py >= window.getSize().y - pixelSize.y/2 && obj.vy > 0) {
                 // Stop the object if it's at the bottom of the window
                 obj.vy = 0;
                 obj.py = window.getSize().y - pixelSize.y/2; // Adjust position to sit on the bottom
+            } else {
+                // Apply gravity and air resistance if not on the ground or moving upwards
+                obj.ay = gravity - obj.vy * 0.3f;
             }
             obj.vx += obj.ax * deltaTime;
             obj.vy += obj.ay * deltaTime;
@@ -193,6 +299,8 @@ int main()
 
             // Draw the ghost
             window.draw(ghost);
+            timeSlider.draw(window);
+            gravitySlider.draw(window);
             drawRectangleGameObject(obj, obj.c); //Draw each
         }
 
@@ -201,10 +309,15 @@ int main()
             GameObject* obj2 = c.second;
             drawLineBetween(obj1->px, obj1->py, obj2->px, obj2->py, sf::Color::Red);
         }
+        //Snap to grid
         for (GameObject& obj : objects) {
-            // Check if the object is not moving
-            if (obj.vx == 0 && obj.vy == 0) {
+            float objBottom = obj.py + obj.h / 2.0f;
+            // Check if has something under it
+            if ((obj.vy == 0 && obj.vx == 0)) {
+
+
                 snapGameObjectToGrid(obj);
+
             }
         }
         window.display();
@@ -213,46 +326,54 @@ int main()
 }
 
 void handleMouseButtonPressed(const sf::Event& event){
+    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+
     if(event.mouseButton.button == sf::Mouse::Right){
-        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-        pSelectedObject = nullptr;
-        for(auto &obj : objects){
-            if(IsPointInRectangle(obj.px, obj.py, obj.w, obj.h, mousePos.x, mousePos.y)){
-                buttonR = true;
-                pSelectedObject = &obj;
-                break;
+        if (!buttonL) { // Only proceed if left button is not pressed
+            pSelectedObject = nullptr;
+            for(auto &obj : objects){
+                if(IsPointInRectangle(obj.px, obj.py, obj.w, obj.h, mousePos.x, mousePos.y)){
+                    buttonR = true;
+                    pSelectedObject = &obj;
+                    break;
+                }
             }
         }
     }
-    if(event.mouseButton.button == sf::Mouse::Left){
-        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-        pSelectedObject = nullptr;
-        for(auto &obj : objects){
-            if(IsPointInRectangle(obj.px, obj.py, obj.w, obj.h, mousePos.x, mousePos.y)){
-                buttonL = true;
-                pSelectedObject = &obj;
-                break;
+    else if(event.mouseButton.button == sf::Mouse::Left){
+        if (!buttonR) { // Only proceed if right button is not pressed
+            pSelectedObject = nullptr;
+            for(auto &obj : objects){
+                if(IsPointInRectangle(obj.px, obj.py, obj.w, obj.h, mousePos.x, mousePos.y)){
+                    buttonL = true;
+                    pSelectedObject = &obj;
+                    break;
+                }
             }
         }
     }
 }
+
 void handleMouseButtonReleased(const sf::Event& event){
+    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+
     if(event.mouseButton.button == sf::Mouse::Left){
         buttonL = false;
-        pSelectedObject = nullptr;
     }
     if(event.mouseButton.button == sf::Mouse::Right) {
-        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-
+        buttonR = false;
         if (pSelectedObject != nullptr) {
-            buttonR = false;
             pSelectedObject->vx = 0.5f * ((pSelectedObject->px) - (float)mousePos.x);
             pSelectedObject->vy = 0.5f * ((pSelectedObject->py) - (float)mousePos.y);
         }
+    }
 
+    // Only set to nullptr if both buttons are not pressed
+    if (!buttonL && !buttonR) {
         pSelectedObject = nullptr;
     }
 }
+
 void drawRectangleGameObject(GameObject& rect, sf::Color color){
     sf::RectangleShape rectangle;
     // Set the position considering px and py as the center

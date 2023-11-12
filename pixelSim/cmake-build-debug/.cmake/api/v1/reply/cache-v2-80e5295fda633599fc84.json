@@ -1402,6 +1402,18 @@
 			"value" : "SFML_DOC_DIR-NOTFOUND"
 		},
 		{
+			"name" : "TGUI_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "The directory containing a CMake configuration file for TGUI."
+				}
+			],
+			"type" : "PATH",
+			"value" : "TGUI_DIR-NOTFOUND"
+		},
+		{
 			"name" : "VorbisEnc_LIB",
 			"properties" : 
 			[
