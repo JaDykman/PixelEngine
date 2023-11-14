@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
+#include "GuiClass.h"
 #include <iostream>
 
 // Constants and globals
@@ -15,85 +16,6 @@ struct GameObject{
     float w; float h;
     sf::Color c;
     int id;
-};
-class Slider {
-public:
-    Slider(float x, float y, float width, float height, float minVal, float maxVal)
-            : isHorizontal(width > height) {
-        // Initialize the slider bar
-        bar.setSize(sf::Vector2f(width, height));
-        bar.setPosition(x, y);
-        bar.setFillColor(sf::Color(255,255,255,1));
-
-        // Initialize the slider handle
-        float handleSize = isHorizontal ? height : width;
-        handle.setRadius(handleSize / 2);
-        if (isHorizontal) {
-            handle.setPosition(x, y + (height / 2) - handle.getRadius());
-        } else {
-            handle.setPosition(x + (width / 2) - handle.getRadius(), y);
-        }
-        handle.setFillColor(sf::Color::Red);
-
-        // Slider values
-        minValue = minVal;
-        maxValue = maxVal;
-        currentValue = minVal;
-    }
-
-    void handleEvent(sf::Event& event, const sf::RenderWindow& window) {
-        if (event.type == sf::Event::MouseButtonPressed) {
-            if (event.mouseButton.button == sf::Mouse::Left) {
-                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-                if (handle.getGlobalBounds().contains(mousePos.x, mousePos.y)) {
-                    isDragging = true;
-                }
-            }
-        }
-
-        if (event.type == sf::Event::MouseButtonReleased) {
-            if (event.mouseButton.button == sf::Mouse::Left) {
-                isDragging = false;
-            }
-        }
-
-        if (event.type == sf::Event::MouseMoved) {
-            if (isDragging) {
-                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-                if (isHorizontal) {
-                    float newPos = std::max(static_cast<float>(mousePos.x), bar.getPosition().x);
-                    newPos = std::min(newPos, bar.getPosition().x + bar.getSize().x - handle.getRadius() * 2);
-                    handle.setPosition(newPos, handle.getPosition().y);
-
-                    // Update current value for horizontal slider
-                    currentValue = minValue + (newPos - bar.getPosition().x) / bar.getSize().x * (maxValue - minValue);
-                } else {
-                    float newPos = std::max(static_cast<float>(mousePos.y), bar.getPosition().y);
-                    newPos = std::min(newPos, bar.getPosition().y + bar.getSize().y - handle.getRadius() * 2);
-                    handle.setPosition(handle.getPosition().x, newPos);
-
-                    // Update current value for vertical slider
-                    currentValue = minValue + (newPos - bar.getPosition().y) / bar.getSize().y * (maxValue - minValue);
-                }
-            }
-        }
-    }
-
-    void draw(sf::RenderWindow& window) {
-        window.draw(bar);
-        window.draw(handle);
-    }
-
-    float getValue() const {
-        return currentValue;
-    }
-
-private:
-    sf::RectangleShape bar;
-    sf::CircleShape handle;
-    bool isDragging = false;
-    bool isHorizontal;
-    float minValue, maxValue, currentValue;
 };
 
 std::vector<GameObject> objects;
@@ -174,8 +96,8 @@ sf::RenderWindow window(sf::VideoMode(900, 500), "Pixel Engine"); // Create the 
 
 int main()
 {
-    Slider timeSlider(0, 0, 10, 100, 0 , deltaTime);
-    Slider gravitySlider(10,0,10, 100, -gravity, gravity);
+    Slider timeSlider(0, 0, 10, 100, 0 , deltaTime, sf::Color(255,255,255,100));
+    Slider gravitySlider(10,0,10, 100, -gravity, gravity, sf::Color(255,255,255,100));
 
     for (int i = 0; i < 100; ++i) { // Draw some pixels randomly
         float adjustedX = rand() % (int)std::round(window.getSize().x / pixelSize.x) * pixelSize.x;

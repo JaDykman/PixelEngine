@@ -128,6 +128,30 @@ pixelSim/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\pixelSim.dir\build.make CMakeFiles/pixelSim.dir/build
 .PHONY : pixelSim/fast
 
+GuiClass.obj: GuiClass.cpp.obj
+.PHONY : GuiClass.obj
+
+# target to build an object file
+GuiClass.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\pixelSim.dir\build.make CMakeFiles/pixelSim.dir/GuiClass.cpp.obj
+.PHONY : GuiClass.cpp.obj
+
+GuiClass.i: GuiClass.cpp.i
+.PHONY : GuiClass.i
+
+# target to preprocess a source file
+GuiClass.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\pixelSim.dir\build.make CMakeFiles/pixelSim.dir/GuiClass.cpp.i
+.PHONY : GuiClass.cpp.i
+
+GuiClass.s: GuiClass.cpp.s
+.PHONY : GuiClass.s
+
+# target to generate assembly for a file
+GuiClass.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\pixelSim.dir\build.make CMakeFiles/pixelSim.dir/GuiClass.cpp.s
+.PHONY : GuiClass.cpp.s
+
 main.obj: main.cpp.obj
 .PHONY : main.obj
 
@@ -161,6 +185,9 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... pixelSim
+	@echo ... GuiClass.obj
+	@echo ... GuiClass.i
+	@echo ... GuiClass.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
