@@ -8,8 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "C:/Users/jacob/OneDrive/Documents/GitHub/PixelEngine/pixelSim/GuiClass.cpp" "CMakeFiles/pixelSim.dir/GuiClass.cpp.obj" "gcc" "CMakeFiles/pixelSim.dir/GuiClass.cpp.obj.d"
-  "C:/Users/jacob/OneDrive/Documents/GitHub/PixelEngine/pixelSim/main.cpp" "CMakeFiles/pixelSim.dir/main.cpp.obj" "gcc" "CMakeFiles/pixelSim.dir/main.cpp.obj.d"
+  "C:/Users/Owner/Documents/Ai/PixelEngine/pixelSim/GuiClass.cpp" "CMakeFiles/pixelSim.dir/GuiClass.cpp.obj" "gcc" "CMakeFiles/pixelSim.dir/GuiClass.cpp.obj.d"
+  "C:/Users/Owner/Documents/Ai/PixelEngine/pixelSim/main.cpp" "CMakeFiles/pixelSim.dir/main.cpp.obj" "gcc" "CMakeFiles/pixelSim.dir/main.cpp.obj.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

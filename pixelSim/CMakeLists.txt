@@ -9,8 +9,9 @@ add_executable(pixelSim main.cpp
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)
-set(SFML_DIR C:/Users/jacob/Downloads/SFML-2.6.0-windows-gcc-13.1.0-mingw-64-bit/SFML-2.6.0/lib/cmake/SFML)
+set(SFML_DIR C:/Users/Owner/Documents/Ai/PixelEngine/SFML-2.6.0/lib/cmake/SFML)
 find_package(SFML COMPONENTS system window graphics audio network REQUIRED)
 
-include_directories(C:/Users/jacob/Downloads/SFML-2.6.0-windows-gcc-13.1.0-mingw-64-bit/SFML-2.6.0/include)
+include_directories(SFML-2.6.0/include)
 target_link_libraries(pixelSim sfml-system sfml-window  sfml-graphics sfml-audio)
+

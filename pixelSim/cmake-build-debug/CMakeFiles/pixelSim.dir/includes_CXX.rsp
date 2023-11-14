@@ -1,1 +1,1 @@
--isystem "C:/Users/jacob/Downloads/SFML-2.6.0-windows-gcc-13.1.0-mingw-64-bit/SFML-2.6.0/include"
+-I"C:/Users/Owner/Documents/Ai/PixelEngine/pixelSim/SFML-2.6.0/include" -isystem "C:/Users/Owner/Documents/Ai/PixelEngine/SFML-2.6.0/include"
