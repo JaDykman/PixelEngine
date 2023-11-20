@@ -92,6 +92,12 @@
 		<Unit filename="C:/Users/jacob/OneDrive/Documents/GitHub/PixelEngine/pixelSim/GuiClass.h">
 			<Option target="pixelSim"/>
 		</Unit>
+		<Unit filename="C:/Users/jacob/OneDrive/Documents/GitHub/PixelEngine/pixelSim/cmake-build-debug/GameObject.cpp">
+			<Option target="pixelSim"/>
+		</Unit>
+		<Unit filename="C:/Users/jacob/OneDrive/Documents/GitHub/PixelEngine/pixelSim/cmake-build-debug/GameObject.h">
+			<Option target="pixelSim"/>
+		</Unit>
 		<Unit filename="C:/Users/jacob/OneDrive/Documents/GitHub/PixelEngine/pixelSim/main.cpp">
 			<Option target="pixelSim"/>
 		</Unit>

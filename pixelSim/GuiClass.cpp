@@ -2,6 +2,19 @@
 
 #include "GuiClass.h"
 
+void GuiObject::handleEvent(sf::Event &event, const sf::RenderWindow &window) {
+
+}
+
+void GuiObject::draw(sf::RenderWindow &window) {
+
+}
+
+auto GuiObject::getValue() const {
+    return nullptr;
+}
+
+
 // Implementing Slider's constructor
 Slider::Slider(float x, float y, float width, float height, float minVal, float maxVal, sf::Color color)
         : isHorizontal(width > height), minValue(minVal), maxValue(maxVal), currentValue(minVal) {
@@ -20,8 +33,6 @@ Slider::Slider(float x, float y, float width, float height, float minVal, float 
     }
     handle.setFillColor(sf::Color::Red);
 }
-
-// Implementing Slider's handleEvent method
 void Slider::handleEvent(sf::Event& event, const sf::RenderWindow& window) {
     if (event.type == sf::Event::MouseButtonPressed) {
         if (event.mouseButton.button == sf::Mouse::Left) {
@@ -59,14 +70,49 @@ void Slider::handleEvent(sf::Event& event, const sf::RenderWindow& window) {
         }
     }
 }
-
-// Implementing Slider's draw method
 void Slider::draw(sf::RenderWindow& window) {
     window.draw(bar);
     window.draw(handle);
 }
-
-// Implementing Slider's getValue method
 float Slider::getValue() const {
     return currentValue;
+}
+
+Button::Button(float x, float y, float width, float height, std::string text, sf::Color color) {
+    // Initialize the sprite
+    sprite.setSize(sf::Vector2f(width, height));
+    sprite.setPosition(x, y);
+    sprite.setFillColor(color); // Adjusted alpha value for visibility
+    sprite.setFillColor(color);
+}
+void Button::handleEvent(sf::Event &event, const sf::RenderWindow &window) {
+    if (event.type == sf::Event::MouseButtonPressed) {
+        if (event.mouseButton.button == sf::Mouse::Left) {
+            sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+            if (sprite.getGlobalBounds().contains(mousePos.x, mousePos.y)) {
+                //TODO button state = true
+            }
+        }
+    }
+
+
+    if (event.type == sf::Event::MouseButtonReleased) {
+        if (event.mouseButton.button == sf::Mouse::Left) {
+            //TODO button state = false
+        }
+    }
+}
+void Button::draw(sf::RenderWindow &window) {
+    window.draw(sprite);
+}
+bool Button::getValue() const {
+        return currentValue;
+}
+
+Line::Line(float x1, float y1, float x2, float y2, sf::RenderWindow &window, sf::Color color) {
+    sf::Vertex line[] = {
+            sf::Vertex(sf::Vector2f(x1, y1), color),
+            sf::Vertex(sf::Vector2f(x2, y2), color),
+    };
+    window.draw(line, 2, sf::Lines); // Draw the line
 }
