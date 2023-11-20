@@ -64,6 +64,7 @@ auto IsPointInRectangle = [](float rectX, float rectY, float width, float height
     }
     return false; // Nothing below
 }*/
+
 bool isInCollidingPairs(GameObject *obj) { // Function to check if an object is in the vecCollidingPairs
     for (const auto& pair : vecCollidingPairs) {
         if (pair.first == obj || pair.second == obj) {
