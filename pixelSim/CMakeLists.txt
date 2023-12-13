@@ -8,6 +8,8 @@ add_executable(pixelSim main.cpp
         GuiClass.h
         cmake-build-debug/GameObject.cpp
         cmake-build-debug/GameObject.h
+        ChunkClass.cpp
+        ChunkClass.h
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

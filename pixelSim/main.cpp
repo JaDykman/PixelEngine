@@ -4,9 +4,11 @@
 #include "cmake-build-debug/GameObject.h"
 #include <iostream>
 #include <memory>
+#include <thread>
 
 // Constants and globals
 const sf::Vector2f pixelSize(12.0f, 12.0f); //TODO this
+const sf::Vector2i chunkSize(4,4);
 float gravity = 9.81f;
 float deltaTime = 0.015667f;
 bool buttonL;
@@ -17,7 +19,7 @@ GameObject *pSelectedObject = nullptr;
 std::vector<GameObject*> objects;
 std::vector<std::pair<GameObject*, GameObject*>> vecCollidingPairs;
 std::vector<Slider*> GuiObjects;
-
+std::vector<std::vector<GameObject*>> chunks;
 //TODO Move to class
 bool DoRectanglesOverlap(GameObject *obj, GameObject *target) {
     // Calculate the left, right, top, and bottom of each rectangle
@@ -34,7 +36,6 @@ bool DoRectanglesOverlap(GameObject *obj, GameObject *target) {
     // Check for overlap
     return !(left1 > right2 || right1 < left2 || top1 > bottom2 || bottom1 < top2);
 }
-
 void handleMouseButtonPressed(const sf::Event& event);
 void handleMouseButtonReleased(const sf::Event& event);
 bool doGhostsOverlap(GameObject *obj, GameObject *target);
@@ -48,23 +49,6 @@ auto IsPointInRectangle = [](float rectX, float rectY, float width, float height
     // Check if the point is within the bounds of the rectangle
     return (px >= left && px <= right) && (py >= top && py <= bottom);
 };
-/*bool isGroundOrObjectBelow(GameObject& obj) {
-    // Example check for ground or other objects
-    // This needs to be tailored to your game's logic
-    for (const GameObject other : objects) {
-        if (other.id != obj.id) {
-            // Adjust these conditions based on your game's collision logic
-            if (obj.px < other.px + other.w &&
-                obj.px + obj.w > other.px &&
-                obj.py < other.py + other.h &&
-                obj.h + obj.py > other.py) {
-                return true; // There's an object below
-            }
-        }
-    }
-    return false; // Nothing below
-}*/
-
 bool isInCollidingPairs(GameObject *obj) { // Function to check if an object is in the vecCollidingPairs
     for (const auto& pair : vecCollidingPairs) {
         if (pair.first == obj || pair.second == obj) {
@@ -73,17 +57,25 @@ bool isInCollidingPairs(GameObject *obj) { // Function to check if an object is 
     }
     return false;
 }
-
 sf::RenderWindow window(sf::VideoMode(900, 500), "Pixel Engine"); // Create the game window
-
+void handler(GameObject* object, GameObject* target){
+    object->handleCollision(target);
+}
 int main()
 {
+    //Create Chunks
+    for (int x = 0; x < chunkSize.x; ++x) {
+        for (int y = 0; y < chunkSize.y; ++y) {
+            chunks.emplace_back();
+        }
+    }
+
     Slider gravitySlider(0, 0, 10, 100, gravity, -gravity, sf::Color(255, 255, 255, 1));
     GuiObjects.push_back(&gravitySlider);
     Slider timeSlider(10, 0, 10, 100, deltaTime, 0, sf::Color(255, 255, 255, 1));
     GuiObjects.push_back(&timeSlider);
 
-    for (int i = 0; i < 200; ++i) { // Draw some pixels randomly
+    for (int i = 0; i < 300; ++i) { // Draw some pixels randomly
         float adjustedX = rand() % (int)std::round(window.getSize().x / pixelSize.x) * pixelSize.x;
         float adjustedY = rand() % (int) std::round(window.getSize().y / pixelSize.y) * pixelSize.y;
         GameObject::AddRect(adjustedX, adjustedY, pixelSize.x, pixelSize.y, objects);
@@ -204,7 +196,6 @@ void handleMouseButtonReleased(const sf::Event& event){
         pSelectedObject = nullptr;
     }
 }
-
 bool doGhostsOverlap(GameObject *obj, GameObject *target){
     float checkWidth = obj->w * 2.99;
     float checkHeight = obj->h * 2.99;

@@ -54,7 +54,7 @@ void GameObject::drawGhost(sf::RenderWindow &window) {
 
 }
 void GameObject::handleCollision(GameObject* target) {
-// Calculate overlap in both axes
+    // Calculate overlap in both axes
     float overlapX, overlapY;
 
     if (this->px < target->px)

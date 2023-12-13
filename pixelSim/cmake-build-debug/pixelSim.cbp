@@ -86,6 +86,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="C:/Users/jacob/OneDrive/Documents/GitHub/PixelEngine/pixelSim/ChunkClass.cpp">
+			<Option target="pixelSim"/>
+		</Unit>
+		<Unit filename="C:/Users/jacob/OneDrive/Documents/GitHub/PixelEngine/pixelSim/ChunkClass.h">
+			<Option target="pixelSim"/>
+		</Unit>
 		<Unit filename="C:/Users/jacob/OneDrive/Documents/GitHub/PixelEngine/pixelSim/GuiClass.cpp">
 			<Option target="pixelSim"/>
 		</Unit>

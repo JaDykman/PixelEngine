@@ -128,6 +128,30 @@ pixelSim/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\pixelSim.dir\build.make CMakeFiles/pixelSim.dir/build
 .PHONY : pixelSim/fast
 
+ChunkClass.obj: ChunkClass.cpp.obj
+.PHONY : ChunkClass.obj
+
+# target to build an object file
+ChunkClass.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\pixelSim.dir\build.make CMakeFiles/pixelSim.dir/ChunkClass.cpp.obj
+.PHONY : ChunkClass.cpp.obj
+
+ChunkClass.i: ChunkClass.cpp.i
+.PHONY : ChunkClass.i
+
+# target to preprocess a source file
+ChunkClass.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\pixelSim.dir\build.make CMakeFiles/pixelSim.dir/ChunkClass.cpp.i
+.PHONY : ChunkClass.cpp.i
+
+ChunkClass.s: ChunkClass.cpp.s
+.PHONY : ChunkClass.s
+
+# target to generate assembly for a file
+ChunkClass.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\pixelSim.dir\build.make CMakeFiles/pixelSim.dir/ChunkClass.cpp.s
+.PHONY : ChunkClass.cpp.s
+
 GameObject.obj: GameObject.cpp.obj
 .PHONY : GameObject.obj
 
@@ -209,6 +233,9 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... pixelSim
+	@echo ... ChunkClass.obj
+	@echo ... ChunkClass.i
+	@echo ... ChunkClass.s
 	@echo ... GameObject.obj
 	@echo ... GameObject.i
 	@echo ... GameObject.s
